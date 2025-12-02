@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/grego/OneDrive/Documents/EFREI/SEMESTRE%205%20-%20CONCORDIA/folder/MACHINE-LEARNING-Project/mlruns/203916379740516726/models/m-1478d678ae234c0ebc1e9243fbbddf1c/artifacts
+creation_timestamp: 1764704643828
+experiment_id: '203916379740516726'
+last_updated_timestamp: 1764704652047
+model_id: m-1478d678ae234c0ebc1e9243fbbddf1c
+model_type: null
+name: model
+source_run_id: 97cc2355bbf64c468a3f1af22f74e335
+status: 2
+status_message: null

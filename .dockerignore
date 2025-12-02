@@ -1,0 +1,17 @@
+# .dockerignore
+
+# Ignore virtual environments
+venv/
+.venv/
+
+# Ignore Python and IDE caches
+__pycache__/
+.idea/
+.ipynb_checkpoints/
+
+# Ignore data (not needed for the API)
+*.csv
+*.zip
+
+# Ignore notebook files
+*.ipynb
