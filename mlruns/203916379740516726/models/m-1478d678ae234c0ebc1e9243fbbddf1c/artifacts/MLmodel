@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/grego/OneDrive/Documents/EFREI/SEMESTRE%205%20-%20CONCORDIA/folder/MACHINE-LEARNING-Project/mlruns/203916379740516726/models/m-1478d678ae234c0ebc1e9243fbbddf1c/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.9
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.6.0
+model_id: m-1478d678ae234c0ebc1e9243fbbddf1c
+model_size_bytes: 861
+model_uuid: m-1478d678ae234c0ebc1e9243fbbddf1c
+prompts: null
+run_id: 97cc2355bbf64c468a3f1af22f74e335
+utc_time_created: '2025-12-02 19:44:03.913534'

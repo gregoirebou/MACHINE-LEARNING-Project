@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Risk Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .result-box { display: none; margin-top: 20px; padding: 20px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">🏥 Patient Health Risk Prediction</h3>
+                </div>
+                <div class="card-body">
+                    <p>Enter the patient's key health indicators below to predict diabetes risk.</p>
+
+                    <form id="predictionForm">
+
+                        <div class="mb-3">
+                            <label class="form-label">High Blood Pressure (HighBP)</label>
+                            <select class="form-select" id="HighBP">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">General Health (1=Excellent, 5=Poor)</label>
+                            <input type="range" class="form-range" min="1" max="5" step="1" id="GenHlth" oninput="this.nextElementSibling.value = this.value">
+                            <output>3</output>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Body Mass Index (BMI)</label>
+                            <input type="number" class="form-control" id="BMI" value="25" placeholder="e.g. 28">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Difficulty Walking (DiffWalk)</label>
+                            <select class="form-select" id="DiffWalk">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Age Category (1 = 18-24, 13 = 80+)</label>
+                            <select class="form-select" id="Age">
+                                <option value="1">18-24</option>
+                                <option value="4">35-39</option>
+                                <option value="8">55-59</option>
+                                <option value="10">65-69</option>
+                                <option value="13">80+</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">Run Prediction</button>
+                    </form>
+
+                    <div id="result" class="result-box text-center">
+                        <h4 id="predictionText"></h4>
+                        <p id="probabilityText"></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('predictionForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Stop page reload
+
+        // 1. Get values from the form
+        const highBP = parseFloat(document.getElementById('HighBP').value);
+        const genHlth = parseFloat(document.getElementById('GenHlth').value);
+        const bmi = parseFloat(document.getElementById('BMI').value);
+        const diffWalk = parseFloat(document.getElementById('DiffWalk').value);
+        const age = parseFloat(document.getElementById('Age').value);
+
+        // 2. Construct the 21-feature array
+        // We fill the "less important" features with default values (0) for the demo
+        // The order MUST match your training data columns perfectly!
+        const features = [
+            highBP, // 0: HighBP
+            0,      // 1: HighChol (Default)
+            1,      // 2: CholCheck (Default Yes)
+            bmi,    // 3: BMI
+            0,      // 4: Smoker
+            0,      // 5: Stroke
+            0,      // 6: HeartDiseaseorAttack
+            1,      // 7: PhysActivity (Default Yes)
+            1,      // 8: Fruits
+            1,      // 9: Veggies
+            0,      // 10: HvyAlcoholConsump
+            1,      // 11: AnyHealthcare
+            0,      // 12: NoDocbcCost
+            genHlth,// 13: GenHlth
+            0,      // 14: MentHlth
+            0,      // 15: PhysHlth
+            diffWalk,// 16: DiffWalk
+            1,      // 17: Sex (Default Male)
+            age,    // 18: Age
+            5,      // 19: Education (Default)
+            6       // 20: Income (Default)
+        ];
+
+        // 3. Send to API
+        fetch('/predict', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ features: features })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 4. Show result
+            const resultBox = document.getElementById('result');
+            const predText = document.getElementById('predictionText');
+            const probText = document.getElementById('probabilityText');
+
+            resultBox.style.display = 'block';
+
+            if (data.prediction === 1) {
+                resultBox.className = 'result-box bg-danger text-white';
+                predText.innerText = '⚠️ RISK DETECTED: DIABETIC';
+            } else {
+                resultBox.className = 'result-box bg-success text-white';
+                predText.innerText = '✅ LOW RISK: NON-DIABETIC';
+            }
+            probText.innerText = 'Probability: ' + (data.diabetes_probability * 100).toFixed(2) + '%';
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
