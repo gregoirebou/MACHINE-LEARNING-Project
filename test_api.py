@@ -1,7 +1,7 @@
 import requests
 import json
 
-# URL of your local Docker API
+# URL of local Docker API
 url = 'http://127.0.0.1:5000/predict'
 
 # ----------------------------------------------------

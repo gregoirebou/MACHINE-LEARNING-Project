@@ -10,8 +10,7 @@ COPY requirements.txt .
 # 4. Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. Copy ALL your project files into the container
-#    (This includes app.py, *.pkl, etc.)
+# 5. Copy ALL project files into the container
 COPY . .
 
 # 6. Expose the port that Flask is running on (defined in app.py)
